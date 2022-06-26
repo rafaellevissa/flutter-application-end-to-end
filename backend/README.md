@@ -1,4 +1,4 @@
-# DQRTECH
+# BACKEND
 
 ## CHALLENGE
 

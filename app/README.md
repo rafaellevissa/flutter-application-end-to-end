@@ -1,5 +1,4 @@
-# DQRTECH
-
+# APP
 ## CHALLENGE
 
 https://github.com/smash-gift/fullstack-dev-test
