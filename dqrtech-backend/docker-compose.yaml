@@ -1,0 +1,20 @@
+version: '3.3'
+services:
+  api:
+    build: .
+    ports:
+      - 3333:3333
+    depends_on:
+      - redis
+
+  redis:
+    container_name: redis
+    image: redis:7.0-alpine
+    command: redis-server --save 20 1 --loglevel warning --requirepass ${BULL_REDIS_PASSWORD}
+    ports:
+      - ${BULL_REDIS_PORT}:${BULL_REDIS_PORT}
+    volumes:
+      - redis:/data
+
+volumes:
+  redis:

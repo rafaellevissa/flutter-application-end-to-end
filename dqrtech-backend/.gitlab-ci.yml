@@ -1,0 +1,55 @@
+stages:
+  - build
+  - test
+  - deploy
+
+build:
+  image: docker
+  only:
+    - main
+  services:
+    - docker:dind
+  stage: build
+  script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - docker build --pull -t "$CI_REGISTRY_IMAGE:dqrtech" .
+    - docker push "$CI_REGISTRY_IMAGE:dqrtech"
+
+test:
+  stage: test
+  only:
+    - main
+  image: node:17-alpine
+  before_script:
+    - cp $ENV .env
+    - npm install
+  script:
+    - npm run test
+
+deploy:
+  only:
+    - main
+  stage: deploy
+  image: alpine
+  variables:
+    SERVER: $SERVER_IP
+    PORT: $SERVER_PORT
+    USER: $USERNAME
+  script:
+    - apk add openssh
+    - apk add bash
+    - mkdir ~/.ssh
+    - echo "$SSH_KNOWN_HOSTS_GCP" >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+    # add ssh key stored in SSH_PRIVATE_KEY variable to the agent store
+    - eval $(ssh-agent -s)
+    - bash -c 'ssh-add <(echo "$SSH_PRIVATE_KEY_GCP")'
+    - scp $ENV $USER@$SERVER:.envdqrtech
+    # log into Docker registry
+    - ssh $USER@$SERVER "echo $CI_BUILD_TOKEN | docker login --username gitlab-ci-token --password-stdin registry.gitlab.com"
+    # stop container, remove image.
+    - ssh $USER@$SERVER "docker container stop dqrtech" || true
+    - ssh $USER@$SERVER "docker container rm dqrtech" || true
+    - ssh $USER@$SERVER "docker image rm ${CI_REGISTRY_IMAGE}:dqrtech" || true
+    # start new container
+    - ssh $USER@$SERVER "docker container run -v /home/$USER/.envdqrtech:/app/.env --name dqrtech -p $PORT:3333 -d ${CI_REGISTRY_IMAGE}:dqrtech"

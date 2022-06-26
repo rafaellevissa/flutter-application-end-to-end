@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "812851367729",
+    "project_id": "dqrtech-9c9c7",
+    "storage_bucket": "dqrtech-9c9c7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:812851367729:android:1222b840212e1e0d846a10",
+        "android_client_info": {
+          "package_name": "com.dqrtech"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "812851367729-asbh5vkei6nuf0edbj8s1j474kebmod4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXIMI5lOMSYgShS4x1oH9GOc8p83YVSes"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "812851367729-asbh5vkei6nuf0edbj8s1j474kebmod4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

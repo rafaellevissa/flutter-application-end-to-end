@@ -1,0 +1,25 @@
+/api/country-city/upload:
+  post:
+    tags:
+      - CountryCity
+    security: []
+    description: Upload csv with countries and cities
+    parameters:
+      - name: file
+        in:  file
+        required: true
+        schema:
+          properties:
+            body:
+              type: string
+              format: binary
+              required: true
+    produces:
+      - application/json
+    responses:
+      200:
+        description: Success
+      400:
+        description: Bad Request
+      500:
+        description: Internal Error
